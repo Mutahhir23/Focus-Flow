@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Plus, DollarSign, ArrowUpRight, ArrowDownRight, RefreshCw } from 'lucide-react';
+import { useState } from 'react';
+import { Plus, Wallet, ArrowUpRight, ArrowDownRight } from 'lucide-react';
 
 interface Transaction {
   id: number;
@@ -74,32 +74,28 @@ export default function MoneyManager() {
       default:
         return `$${amount.toFixed(2)}`;
     }
-  };
-
-  const getNextCurrency = () => {
-    const currencies: Currency[] = ['USD', 'INR', 'GBP'];
-    const currentIndex = currencies.indexOf(currency);
-    return currencies[(currentIndex + 1) % currencies.length];
-  };
+  };  
 
   return (
     <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-md p-8">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-[#2D4F3C]">Money Manager</h2>
-        <button
-          onClick={() => setCurrency(getNextCurrency())}
-          className="flex items-center text-[#2D4F3C] hover:text-[#1A2F24] bg-[#F5F2EA] px-4 py-2 rounded-lg"
+        <select
+          value={currency}
+          onChange={(e) => setCurrency(e.target.value as Currency)}
+          className="text-[#2D4F3C] hover:text-[#1A2F24] bg-[#F5F2EA] px-4 py-2 rounded-lg"
         >
-          <RefreshCw className="w-4 h-4 mr-2" />
-          Show in {getNextCurrency()}
-        </button>
+          <option value="USD">USD</option>
+          <option value="INR">INR</option>
+          <option value="GBP">GBP</option>
+        </select>
       </div>
 
       <div className="grid grid-cols-3 gap-4 mb-8">
         <div className="bg-[#F5F2EA] p-4 rounded-lg">
           <div className="text-sm text-gray-600 mb-1">Balance</div>
           <div className="text-xl font-bold text-[#2D4F3C] flex items-center">
-            <DollarSign className="w-5 h-5 mr-1" />
+            <Wallet className="w-5 h-5 mr-1" />
             {formatCurrency(balance)}
           </div>
         </div>
@@ -129,6 +125,7 @@ export default function MoneyManager() {
         />
         <input
           type="number"
+          min={0}
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           placeholder="Amount"
