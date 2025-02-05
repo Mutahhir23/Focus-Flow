@@ -1,14 +1,6 @@
 import React from 'react';
 import { Target, Calendar, Wallet, StickyNote, Bell, Timer } from 'lucide-react';
 
-function openPage(str: String): void{
-
-  // Change the state of parent component to open the page
-  // For example, set the state of the parent component to "goals" to open the goals page
-  
-  // parentComponent.setState({page: str});
-}
-
 interface ChangeHandler {
   handler: (str: String) => void;
 }

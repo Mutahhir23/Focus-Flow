@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Plus, Bell, Trash, Check } from 'lucide-react';
+import  { useEffect, useState } from 'react';
+import { Plus, Trash, Check } from 'lucide-react';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface Reminder {
   id: number;
@@ -9,9 +10,21 @@ interface Reminder {
 }
 
 export default function Reminders() {
-  const [reminders, setReminders] = useState<Reminder[]>([]);
+  const [setReminders, getReminders] = useLocalStorage('reminders');
+  const [effect_val, setEffect_val] = useState(0);
   const [text, setText] = useState('');
   const [date, setDate] = useState('');
+
+  var reminders: Array<Reminder>  = [];
+  const temp: any = getReminders();
+  if (temp === undefined) {
+    setReminders([]);
+  }else{
+    reminders = temp;
+  }
+  useEffect(() => {
+    reminders = getReminders();
+  }, [effect_val]);
 
   const addReminder = () => {
     if (text.trim() && date) {
@@ -31,10 +44,12 @@ export default function Reminders() {
     setReminders(reminders.map(reminder =>
       reminder.id === id ? { ...reminder, completed: !reminder.completed } : reminder
     ));
+    setEffect_val(effect_val ? 0 : 1);
   };
 
   const deleteReminder = (id: number) => {
     setReminders(reminders.filter(reminder => reminder.id !== id));
+    setEffect_val(effect_val ? 0 : 1);
   };
 
   // Sort reminders by date and completion status

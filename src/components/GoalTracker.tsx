@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Plus, Check, Trash } from 'lucide-react';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface Goal {
   id: number;
@@ -8,8 +9,18 @@ interface Goal {
 }
 
 export default function GoalTracker() {
-  const [goals, setGoals] = useState<Goal[]>([]);
+  const [setGoals, getGoals] = useLocalStorage('goals');
+  const [effect_val, setEffect_val] = useState(0);
   const [newGoal, setNewGoal] = useState('');
+
+  var goals: Array<Goal>  = [];
+  const temp: any = getGoals();
+  if (temp === undefined) {
+    setGoals([]);
+  }
+  else{
+    goals = temp;
+  }
 
   const addGoal = () => {
     if (newGoal.trim()) {
@@ -22,10 +33,12 @@ export default function GoalTracker() {
     setGoals(goals.map(goal => 
       goal.id === id ? { ...goal, completed: !goal.completed } : goal
     ));
+    setEffect_val(effect_val ? 0 : 1);
   };
 
   const deleteGoal = (id: number) => {
     setGoals(goals.filter(goal => goal.id !== id));
+    setEffect_val(effect_val ? 0 : 1);
   };
 
   return (

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Plus, Wallet, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface Transaction {
   id: number;
@@ -12,11 +13,19 @@ interface Transaction {
 type Currency = 'USD' | 'INR' | 'GBP';
 
 export default function MoneyManager() {
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [setTransactions, getTransactions] = useLocalStorage('transactions');
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
   const [type, setType] = useState<'income' | 'expense'>('expense');
   const [currency, setCurrency] = useState<Currency>('USD');
+  
+    var storedTransactions: Array<Transaction>  = [];
+    var temp: any = getTransactions();
+    if (temp === undefined) {
+      setTransactions([]);
+    }else{
+      storedTransactions = temp;
+    }
 
   // Using fixed exchange rates for demonstration
   // In a production environment, you would want to fetch these from an API
@@ -47,21 +56,22 @@ export default function MoneyManager() {
         type,
         date: new Date().toISOString(),
       };
-      setTransactions([newTransaction, ...transactions]);
+      storedTransactions = [ newTransaction, ...storedTransactions];
+      setTransactions(storedTransactions);
       setDescription('');
       setAmount('');
     }
   };
 
-  const balance = transactions.reduce((acc, curr) => 
+  const balance = storedTransactions.reduce((acc, curr) => 
     curr.type === 'income' ? acc + curr.amount : acc - curr.amount, 0
   );
 
-  const income = transactions
+  const income = storedTransactions
     .filter(t => t.type === 'income')
     .reduce((acc, curr) => acc + curr.amount, 0);
 
-  const expenses = transactions
+  const expenses = storedTransactions
     .filter(t => t.type === 'expense')
     .reduce((acc, curr) => acc + curr.amount, 0);
 
@@ -163,7 +173,9 @@ export default function MoneyManager() {
       </div>
 
       <div className="space-y-3">
-        {transactions.map((transaction) => (
+        
+
+        {storedTransactions.map((transaction) => (
           <div
             key={transaction.id}
             className="flex items-center justify-between p-4 bg-[#F5F2EA] rounded-lg"

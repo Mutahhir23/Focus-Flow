@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Plus, Edit2, Trash, Save } from 'lucide-react';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface Note {
   id: number;
@@ -9,10 +10,20 @@ interface Note {
 }
 
 export default function Notes() {
-  const [notes, setNotes] = useState<Note[]>([]);
+  const [setNotes, getNotes] = useLocalStorage('notes');
+  const [effect_val, setEffect_val] = useState(0);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [editingId, setEditingId] = useState<number | null>(null);
+
+  var notes: Array<Note>  = [];
+  const temp: any = getNotes();
+  if (temp === undefined) {
+    setNotes([]);
+  }
+  else{
+    notes = temp;
+  }
 
   const addNote = () => {
     if (title.trim() && content.trim()) {
@@ -49,6 +60,11 @@ export default function Notes() {
 
   const deleteNote = (id: number) => {
     setNotes(notes.filter(note => note.id !== id));
+    setEditingId(null);
+    setTitle('');
+    setContent('');
+    setEffect_val(effect_val ? 0 : 1);
+
   };
 
   return (

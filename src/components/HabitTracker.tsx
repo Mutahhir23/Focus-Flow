@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Plus, Check, Trash } from 'lucide-react';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface Habit {
   id: number;
@@ -8,8 +9,18 @@ interface Habit {
 }
 
 export default function HabitTracker() {
-  const [habits, setHabits] = useState<Habit[]>([]);
+  const [setHabits, getHabits] = useLocalStorage('habits');
+  const [effect_val, setEffect_val] = useState(0);
   const [newHabit, setNewHabit] = useState('');
+
+  var habits: Array<Habit>  = [];
+  const temp: any = getHabits();
+  if (temp === undefined) {
+    setHabits([]);
+  }
+  else{
+    habits = temp;
+  }
 
   const getDatesForCurrentWeek = () => {
     const dates = [];
@@ -45,10 +56,12 @@ export default function HabitTracker() {
       }
       return habit;
     }));
+    setEffect_val(effect_val ? 0 : 1);
   };
 
   const deleteHabit = (id: number) => {
     setHabits(habits.filter(habit => habit.id !== id));
+    setEffect_val(effect_val ? 0 : 1);
   };
 
   return (
