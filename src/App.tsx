@@ -22,6 +22,10 @@ function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  function openPage(str: String): void{
+    setActiveTab(str.toString());
+  }
+
   const tabs = [
     { id: 'dashboard', name: 'Dashboard', icon: LayoutDashboard },
     { id: 'goals', name: 'Goals Tracker', icon: Target },
@@ -35,7 +39,7 @@ function App() {
   const renderContent = () => {
     switch (activeTab) {
       case 'dashboard':
-        return <Dashboard />;
+        return <Dashboard handler={openPage} />;
       case 'goals':
         return <GoalTracker />;
       case 'habits':
@@ -49,7 +53,7 @@ function App() {
       case 'timer':
         return <PomodoroTimer />;
       default:
-        return <Dashboard />;
+        return <Dashboard handler={openPage} />;
     }
   };
 
