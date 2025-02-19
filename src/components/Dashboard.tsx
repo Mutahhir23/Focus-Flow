@@ -1,5 +1,5 @@
 import React from 'react';
-import { Target, Calendar, Wallet, StickyNote, Bell, Timer } from 'lucide-react';
+import { Target, Calendar, Wallet, StickyNote, Bell, Timer, Lock } from 'lucide-react';
 
 interface ChangeHandler {
   handler: (str: String) => void;
@@ -32,6 +32,14 @@ export default function Dashboard({ handler }: ChangeHandler) {
         <p className="text-gray-600">Manage your income and expenses effectively.</p>
       </div>
 
+      <div className="bg-white rounded-xl shadow-md p-6" onClick={() => handler("passwords")}>
+        <div className="flex items-center mb-4">
+          <Lock className="w-6 h-6 text-[#2D4F3C] mr-3" />
+          <h3 className="text-xl font-bold text-[#2D4F3C]">Passwords</h3>
+        </div>
+        <p className="text-gray-600">Securely store and manage your passwords.</p>
+      </div>
+      
       <div className="bg-white rounded-xl shadow-md p-6" onClick={() => handler("notes")}>
         <div className="flex items-center mb-4">
           <StickyNote className="w-6 h-6 text-[#2D4F3C] mr-3" />

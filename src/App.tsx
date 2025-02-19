@@ -8,7 +8,8 @@ import {
   Timer,
   Menu,
   X,
-  LayoutDashboard
+  LayoutDashboard,
+  Lock
 } from 'lucide-react';
 import Dashboard from './components/Dashboard';
 import GoalTracker from './components/GoalTracker';
@@ -17,6 +18,7 @@ import MoneyManager from './components/MoneyManager';
 import Notes from './components/Notes';
 import Reminders from './components/Reminders';
 import PomodoroTimer from './components/PomodoroTimer';
+import PasswordManager from './components/PasswordManager';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -31,6 +33,7 @@ function App() {
     { id: 'goals', name: 'Goals Tracker', icon: Target },
     { id: 'habits', name: 'Habits Tracker', icon: Calendar },
     { id: 'money', name: 'Money Manager', icon: Wallet },
+    { id: 'passwords', name: 'Password Manager', icon: Lock },
     { id: 'notes', name: 'Notes', icon: StickyNote },
     { id: 'reminders', name: 'Reminders', icon: Bell },
     { id: 'timer', name: 'Timer', icon: Timer },
@@ -46,6 +49,8 @@ function App() {
         return <HabitTracker />;
       case 'money':
         return <MoneyManager />;
+      case 'passwords':
+        return <PasswordManager />;
       case 'notes':
         return <Notes />;
       case 'reminders':
